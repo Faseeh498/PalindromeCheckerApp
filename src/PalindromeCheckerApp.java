@@ -112,9 +112,45 @@ public class PalindromeCheckerApp {
         }
     }
 
+    // ================= UC12 - Strategy Pattern =================
+    interface PalindromeStrategy { boolean check(String input); }
+
+    static class ReverseStrategy implements PalindromeStrategy {
+        @Override public boolean check(String input) {
+            String reversed = "";
+            for (int i = input.length() - 1; i >= 0; i--) reversed += input.charAt(i);
+            return input.equals(reversed);
+        }
+    }
+
+    static class ArrayStrategy implements PalindromeStrategy {
+        @Override public boolean check(String input) {
+            char[] arr = input.toCharArray();
+            int left = 0, right = arr.length - 1;
+            while (left < right) { if (arr[left] != arr[right]) return false; left++; right--; }
+            return true;
+        }
+    }
+
+    static class StackStrategy implements PalindromeStrategy {
+        @Override public boolean check(String input) {
+            Stack<Character> stack = new Stack<>();
+            for (char ch : input.toCharArray()) stack.push(ch);
+            for (char ch : input.toCharArray()) if (ch != stack.pop()) return false;
+            return true;
+        }
+    }
+
+    static class PalindromeContext {
+        private PalindromeStrategy strategy;
+        public void setStrategy(PalindromeStrategy strategy) { this.strategy = strategy; }
+        public boolean executeStrategy(String input) { if (strategy == null) return false; return strategy.check(input); }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         PalindromeService service = new PalindromeService();
+        PalindromeContext context = new PalindromeContext();
 
         System.out.println("=================================");
         System.out.println("     PALINDROME CHECKER APP      ");
@@ -136,6 +172,9 @@ public class PalindromeCheckerApp {
             System.out.println("7. UC9 - Recursive");
             System.out.println("8. UC10 - Case & Space Ignored");
             System.out.println("9. UC11 - OOP Service");
+            System.out.println("10. UC12 - Strategy Pattern (Reverse)");
+            System.out.println("11. UC12 - Strategy Pattern (Array)");
+            System.out.println("12. UC12 - Strategy Pattern (Stack)");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -155,10 +194,13 @@ public class PalindromeCheckerApp {
                 case 7 -> result = recursiveCheck(input, 0, input.length() - 1);
                 case 8 -> result = normalizedCheck(input);
                 case 9 -> result = service.checkPalindrome(input);
+                case 10 -> { context.setStrategy(new ReverseStrategy()); result = context.executeStrategy(input); }
+                case 11 -> { context.setStrategy(new ArrayStrategy()); result = context.executeStrategy(input); }
+                case 12 -> { context.setStrategy(new StackStrategy()); result = context.executeStrategy(input); }
                 default -> System.out.println("Invalid choice! Try again.");
             }
 
-            if (choice >= 1 && choice <= 9)
+            if (choice >= 1 && choice <= 12)
                 System.out.println(input + (result ? " is a Palindrome" : " is NOT a Palindrome"));
         }
 
