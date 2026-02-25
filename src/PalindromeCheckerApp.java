@@ -1,3 +1,10 @@
+import java.util.Scanner;
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Deque;
+import java.util.ArrayDeque;
+
 public class PalindromeCheckerApp {
 
     // ================= UC3 - Reverse String Method =================
@@ -21,7 +28,7 @@ public class PalindromeCheckerApp {
 
     // ================= UC5 - Stack =================
     public static boolean stackCheck(String input) {
-        java.util.Stack<Character> stack = new java.util.Stack<>();
+        Stack<Character> stack = new Stack<>();
         for (char ch : input.toCharArray()) stack.push(ch);
         for (char ch : input.toCharArray())
             if (ch != stack.pop()) return false;
@@ -30,8 +37,8 @@ public class PalindromeCheckerApp {
 
     // ================= UC6 - Queue + Stack =================
     public static boolean queueStackCheck(String input) {
-        java.util.Queue<Character> queue = new java.util.LinkedList<>();
-        java.util.Stack<Character> stack = new java.util.Stack<>();
+        Queue<Character> queue = new LinkedList<>();
+        Stack<Character> stack = new Stack<>();
         for (char ch : input.toCharArray()) {
             queue.add(ch);
             stack.push(ch);
@@ -43,7 +50,7 @@ public class PalindromeCheckerApp {
 
     // ================= UC7 - Deque =================
     public static boolean dequeCheck(String input) {
-        java.util.Deque<Character> deque = new java.util.ArrayDeque<>();
+        Deque<Character> deque = new ArrayDeque<>();
         for (char ch : input.toCharArray()) deque.add(ch);
         while (deque.size() > 1)
             if (!deque.removeFirst().equals(deque.removeLast())) return false;
@@ -65,23 +72,11 @@ public class PalindromeCheckerApp {
             else { tail.next = newNode; tail = newNode; }
         }
         Node slow = head, fast = head;
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
+        while (fast != null && fast.next != null) { slow = slow.next; fast = fast.next.next; }
         Node prev = null;
-        while (slow != null) {
-            Node next = slow.next;
-            slow.next = prev;
-            prev = slow;
-            slow = next;
-        }
+        while (slow != null) { Node next = slow.next; slow.next = prev; prev = slow; slow = next; }
         Node first = head, second = prev;
-        while (second != null) {
-            if (first.data != second.data) return false;
-            first = first.next;
-            second = second.next;
-        }
+        while (second != null) { if (first.data != second.data) return false; first = first.next; second = second.next; }
         return true;
     }
 
@@ -118,50 +113,56 @@ public class PalindromeCheckerApp {
     }
 
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PalindromeService service = new PalindromeService();
+
         System.out.println("=================================");
         System.out.println("     PALINDROME CHECKER APP      ");
         System.out.println("     Version 1.0                 ");
         System.out.println("=================================");
         System.out.println("Application Started Successfully!\n");
 
-        String word = "madam";
-        String testWord = "Ma dam"; // UC10
+        System.out.print("Enter a word or phrase: ");
+        String input = sc.nextLine();
 
-        // UC2
-        boolean isPalindrome = true;
-        for (int i = 0; i < word.length() / 2; i++)
-            if (word.charAt(i) != word.charAt(word.length() - 1 - i)) {
-                isPalindrome = false;
-                break;
+        while (true) {
+            System.out.println("\nSelect method to check palindrome:");
+            System.out.println("1. UC3 - Reverse String");
+            System.out.println("2. UC4 - Character Array");
+            System.out.println("3. UC5 - Stack");
+            System.out.println("4. UC6 - Queue + Stack");
+            System.out.println("5. UC7 - Deque");
+            System.out.println("6. UC8 - Linked List");
+            System.out.println("7. UC9 - Recursive");
+            System.out.println("8. UC10 - Case & Space Ignored");
+            System.out.println("9. UC11 - OOP Service");
+            System.out.println("0. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            if (choice == 0) break;
+
+            boolean result = false;
+            switch (choice) {
+                case 1 -> result = reverseCheck(input);
+                case 2 -> result = arrayCheck(input);
+                case 3 -> result = stackCheck(input);
+                case 4 -> result = queueStackCheck(input);
+                case 5 -> result = dequeCheck(input);
+                case 6 -> result = linkedListCheck(input);
+                case 7 -> result = recursiveCheck(input, 0, input.length() - 1);
+                case 8 -> result = normalizedCheck(input);
+                case 9 -> result = service.checkPalindrome(input);
+                default -> System.out.println("Invalid choice! Try again.");
             }
-        System.out.println(word + (isPalindrome ? " is a Palindrome (UC2)" : " is NOT a Palindrome (UC2)"));
 
-        // UC3
-        System.out.println(word + (reverseCheck(word) ? " is a Palindrome (UC3 - Reverse)" : " is NOT a Palindrome (UC3 - Reverse)"));
+            if (choice >= 1 && choice <= 9)
+                System.out.println(input + (result ? " is a Palindrome" : " is NOT a Palindrome"));
+        }
 
-        // UC4
-        System.out.println(word + (arrayCheck(word) ? " is a Palindrome (UC4 - Array)" : " is NOT a Palindrome (UC4 - Array)"));
-
-        // UC5
-        System.out.println(word + (stackCheck(word) ? " is a Palindrome (UC5 - Stack)" : " is NOT a Palindrome (UC5 - Stack)"));
-
-        // UC6
-        System.out.println(word + (queueStackCheck(word) ? " is a Palindrome (UC6 - Queue + Stack)" : " is NOT a Palindrome (UC6 - Queue + Stack)"));
-
-        // UC7
-        System.out.println(word + (dequeCheck(word) ? " is a Palindrome (UC7 - Deque)" : " is NOT a Palindrome (UC7 - Deque)"));
-
-        // UC8
-        System.out.println(word + (linkedListCheck(word) ? " is a Palindrome (UC8 - Linked List)" : " is NOT a Palindrome (UC8 - Linked List)"));
-
-        // UC9
-        System.out.println(word + (recursiveCheck(word, 0, word.length() - 1) ? " is a Palindrome (UC9 - Recursion)" : " is NOT a Palindrome (UC9 - Recursion)"));
-
-        // UC10
-        System.out.println(testWord + (normalizedCheck(testWord) ? " is a Palindrome (UC10 - Normalized)" : " is NOT a Palindrome (UC10 - Normalized)"));
-
-        // UC11 - OOP Service
-        PalindromeService service = new PalindromeService();
-        System.out.println(word + (service.checkPalindrome(word) ? " is a Palindrome (UC11 - OOP Service)" : " is NOT a Palindrome (UC11 - OOP Service)"));
+        System.out.println("Exiting Palindrome Checker App. Goodbye!");
+        sc.close();
     }
 }
