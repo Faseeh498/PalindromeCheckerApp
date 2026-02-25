@@ -3,9 +3,7 @@ public class PalindromeCheckerApp {
     // ================= UC3 - Reverse String Method =================
     public static boolean reverseCheck(String input) {
         String reversed = "";
-        for (int i = input.length() - 1; i >= 0; i--) {
-            reversed += input.charAt(i);
-        }
+        for (int i = input.length() - 1; i >= 0; i--) reversed += input.charAt(i);
         return input.equals(reversed);
     }
 
@@ -60,22 +58,17 @@ public class PalindromeCheckerApp {
     }
 
     public static boolean linkedListCheck(String input) {
-        // Convert string to linked list
         Node head = null, tail = null;
         for (char ch : input.toCharArray()) {
             Node newNode = new Node(ch);
             if (head == null) head = tail = newNode;
             else { tail.next = newNode; tail = newNode; }
         }
-
-        // Find middle
         Node slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
-
-        // Reverse second half
         Node prev = null;
         while (slow != null) {
             Node next = slow.next;
@@ -83,20 +76,23 @@ public class PalindromeCheckerApp {
             prev = slow;
             slow = next;
         }
-
-        // Compare halves
         Node first = head, second = prev;
         while (second != null) {
             if (first.data != second.data) return false;
             first = first.next;
             second = second.next;
         }
-
         return true;
     }
 
-    public static void main(String[] args) {
+    // ================= UC9 - Recursive =================
+    public static boolean recursiveCheck(String str, int start, int end) {
+        if (start >= end) return true;
+        if (str.charAt(start) != str.charAt(end)) return false;
+        return recursiveCheck(str, start + 1, end - 1);
+    }
 
+    public static void main(String[] args) {
         System.out.println("=================================");
         System.out.println("     PALINDROME CHECKER APP      ");
         System.out.println("     Version 1.0                 ");
@@ -131,5 +127,8 @@ public class PalindromeCheckerApp {
 
         // UC8
         System.out.println(word + (linkedListCheck(word) ? " is a Palindrome (UC8 - Linked List)" : " is NOT a Palindrome (UC8 - Linked List)"));
+
+        // UC9
+        System.out.println(word + (recursiveCheck(word, 0, word.length() - 1) ? " is a Palindrome (UC9 - Recursion)" : " is NOT a Palindrome (UC9 - Recursion)"));
     }
 }
