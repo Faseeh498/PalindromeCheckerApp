@@ -104,6 +104,19 @@ public class PalindromeCheckerApp {
         return true;
     }
 
+    // ================= UC11 - OOP Service =================
+    static class PalindromeService {
+        public boolean checkPalindrome(String input) {
+            int left = 0, right = input.length() - 1;
+            while (left < right) {
+                if (input.charAt(left) != input.charAt(right)) return false;
+                left++;
+                right--;
+            }
+            return true;
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("=================================");
         System.out.println("     PALINDROME CHECKER APP      ");
@@ -112,7 +125,7 @@ public class PalindromeCheckerApp {
         System.out.println("Application Started Successfully!\n");
 
         String word = "madam";
-        String testWord = "Ma dam"; // UC10 example
+        String testWord = "Ma dam"; // UC10
 
         // UC2
         boolean isPalindrome = true;
@@ -146,5 +159,9 @@ public class PalindromeCheckerApp {
 
         // UC10
         System.out.println(testWord + (normalizedCheck(testWord) ? " is a Palindrome (UC10 - Normalized)" : " is NOT a Palindrome (UC10 - Normalized)"));
+
+        // UC11 - OOP Service
+        PalindromeService service = new PalindromeService();
+        System.out.println(word + (service.checkPalindrome(word) ? " is a Palindrome (UC11 - OOP Service)" : " is NOT a Palindrome (UC11 - OOP Service)"));
     }
 }
