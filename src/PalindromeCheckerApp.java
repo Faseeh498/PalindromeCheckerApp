@@ -12,6 +12,25 @@ public class PalindromeCheckerApp {
         return input.equals(reversed);
     }
 
+    // ================= UC4 - Character Array Two Pointer =================
+    public static boolean arrayCheck(String input) {
+
+        char[] arr = input.toCharArray();
+
+        int left = 0;
+        int right = arr.length - 1;
+
+        while (left < right) {
+            if (arr[left] != arr[right])
+                return false;
+
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
 
         // ================= UC1 - Welcome Message =================
@@ -21,8 +40,9 @@ public class PalindromeCheckerApp {
         System.out.println("=================================");
         System.out.println("Application Started Successfully!\n");
 
-        // ================= UC2 - Hardcoded Palindrome =================
         String word = "madam";
+
+        // ================= UC2 - Hardcoded Check =================
         boolean isPalindrome = true;
 
         for (int i = 0; i < word.length() / 2; i++) {
@@ -32,15 +52,18 @@ public class PalindromeCheckerApp {
             }
         }
 
-        if (isPalindrome)
-            System.out.println(word + " is a Palindrome (UC2)");
-        else
-            System.out.println(word + " is NOT a Palindrome (UC2)");
+        System.out.println(word + (isPalindrome ?
+                " is a Palindrome (UC2)" :
+                " is NOT a Palindrome (UC2)"));
 
         // ================= UC3 - Reverse Method =================
-        if (reverseCheck(word))
-            System.out.println(word + " is a Palindrome (UC3 - Reverse)");
-        else
-            System.out.println(word + " is NOT a Palindrome (UC3 - Reverse)");
+        System.out.println(word + (reverseCheck(word) ?
+                " is a Palindrome (UC3 - Reverse)" :
+                " is NOT a Palindrome (UC3 - Reverse)"));
+
+        // ================= UC4 - Array Method =================
+        System.out.println(word + (arrayCheck(word) ?
+                " is a Palindrome (UC4 - Array Two Pointer)" :
+                " is NOT a Palindrome (UC4 - Array Two Pointer)"));
     }
 }
