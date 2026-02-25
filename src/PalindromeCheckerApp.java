@@ -147,6 +147,31 @@ public class PalindromeCheckerApp {
         public boolean executeStrategy(String input) { if (strategy == null) return false; return strategy.check(input); }
     }
 
+    // ================= UC13 - Performance Comparison =================
+    public static void performanceTest(String input) {
+        System.out.println("\n=== UC13: Performance Test ===");
+        String[] methods = {"Reverse", "Array", "Stack", "Queue+Stack", "Deque", "LinkedList", "Recursive", "Normalized", "OOP Service", "Strategy-Array"};
+        Runnable[] runnables = {
+                () -> reverseCheck(input),
+                () -> arrayCheck(input),
+                () -> stackCheck(input),
+                () -> queueStackCheck(input),
+                () -> dequeCheck(input),
+                () -> linkedListCheck(input),
+                () -> recursiveCheck(input, 0, input.length()-1),
+                () -> normalizedCheck(input),
+                () -> new PalindromeService().checkPalindrome(input),
+                () -> new ArrayStrategy().check(input)
+        };
+
+        for (int i=0;i<methods.length;i++){
+            long start = System.nanoTime();
+            runnables[i].run();
+            long end = System.nanoTime();
+            System.out.printf("%-20s : %d ns%n", methods[i], (end-start));
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         PalindromeService service = new PalindromeService();
@@ -175,6 +200,7 @@ public class PalindromeCheckerApp {
             System.out.println("10. UC12 - Strategy Pattern (Reverse)");
             System.out.println("11. UC12 - Strategy Pattern (Array)");
             System.out.println("12. UC12 - Strategy Pattern (Stack)");
+            System.out.println("13. UC13 - Performance Test");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -197,6 +223,7 @@ public class PalindromeCheckerApp {
                 case 10 -> { context.setStrategy(new ReverseStrategy()); result = context.executeStrategy(input); }
                 case 11 -> { context.setStrategy(new ArrayStrategy()); result = context.executeStrategy(input); }
                 case 12 -> { context.setStrategy(new StackStrategy()); result = context.executeStrategy(input); }
+                case 13 -> { performanceTest(input); continue; }
                 default -> System.out.println("Invalid choice! Try again.");
             }
 
