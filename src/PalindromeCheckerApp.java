@@ -31,6 +31,25 @@ public class PalindromeCheckerApp {
         return true;
     }
 
+    // ================= UC5 - Stack Method =================
+    public static boolean stackCheck(String input) {
+
+        java.util.Stack<Character> stack = new java.util.Stack<>();
+
+        // Push characters
+        for (char ch : input.toCharArray()) {
+            stack.push(ch);
+        }
+
+        // Compare by popping
+        for (char ch : input.toCharArray()) {
+            if (ch != stack.pop())
+                return false;
+        }
+
+        return true;
+    }
+
     public static void main(String[] args) {
 
         // ================= UC1 - Welcome Message =================
@@ -65,5 +84,10 @@ public class PalindromeCheckerApp {
         System.out.println(word + (arrayCheck(word) ?
                 " is a Palindrome (UC4 - Array Two Pointer)" :
                 " is NOT a Palindrome (UC4 - Array Two Pointer)"));
+
+        // ================= UC5 - Stack Method =================
+        System.out.println(word + (stackCheck(word) ?
+                " is a Palindrome (UC5 - Stack)" :
+                " is NOT a Palindrome (UC5 - Stack)"));
     }
 }
